@@ -3,7 +3,7 @@ pragma  solidity ^0.4.18;
 contract Videonizer {
 
     address owner;
-    uint constant ownerPercentage = 20;
+    uint constant platformPercentage = 20;
 
     constructor() public {
         owner = msg.sender;
@@ -89,7 +89,13 @@ contract Videonizer {
 
     event NewSale (
         bytes32 aHash,
-        address uAddress
+        address uAddress,
+        uint expertPercentage,
+        uint expertTransfer,
+        uint userPercentage,
+        uint userTransfer,
+        uint ownerPercentage,
+        uint ownerTransfer
     );
     
     mapping (address => UserAccount) UserAccounts;
@@ -156,15 +162,19 @@ contract Videonizer {
         );
     }
     
-    function setSale(bytes32 _aHash) onlyUser public payable haveMoney(_aHash) onlyAssetAndDeal(_aHash){
+    function setSale(bytes32 _aHash) onlyUser payable public haveMoney(_aHash) onlyAssetAndDeal(_aHash){
         Sales[_aHash] = Sale ({
             aHash: _aHash,
             uAddress: msg.sender
         });
-        Deals[_aHash] = Deal ({
-        Deals[_aHash].expertAddress.transfer();
-        })
-        
-        emit NewSale(_aHash, msg.sender);
+        uint expertPercentage = ((msg.value * 80) / 100);
+        uint userPercentage = ((msg.value * 80) / 100);
+        uint ownerPercentage = ((msg.value * platformPercentage) / 100);
+        uint expertProfit = ((expertPercentage * Deals[_aHash].expertPercentage) / 100);
+        uint userProfit = ((userPercentage * Deals[_aHash].userPercentage) / 100);
+        (Deals[_aHash].expertAddress).transfer(expertProfit);
+        (Deals[_aHash].userAddress).transfer(userProfit);
+        owner.transfer(ownerPercentage);
+        emit NewSale(_aHash, msg.sender, Deals[_aHash].expertPercentage, expertProfit, Deals[_aHash].userPercentage, userProfit, platformPercentage, ownerPercentage);
     }
 }
