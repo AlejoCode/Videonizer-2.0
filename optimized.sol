@@ -161,7 +161,7 @@ contract Videonizer {
         );
     }
     
-    function setSale(bytes32 _aHash) onlyUser payable public haveMoney(_aHash) onlyAssetAndDeal(_aHash){
+    function setSale(bytes32 _aHash) payable public haveMoney(_aHash) onlyAssetAndDeal(_aHash){
         Sales[_aHash] = Sale ({
             aHash: _aHash,
             uAddress: msg.sender
