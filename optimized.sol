@@ -102,7 +102,7 @@ contract Videonizer {
     mapping (bytes32 => Deal) Deals;
     mapping (bytes32 => Sale) Sales;
 
-    function setUser(uint8 _role, bytes16 _name) onlyNewUser public {
+    function setUser(uint8 _role, bytes16 _name) public {
         UserAccounts[msg.sender] = UserAccount ({
             uAddress: msg.sender,
             uRole: _role,
