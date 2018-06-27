@@ -66,7 +66,6 @@ contract Videonizer {
     }
 
     event NewUser (
-        address uAddress,
         uint8 uRole,
         bytes16 uName
     );
@@ -110,7 +109,7 @@ contract Videonizer {
             uTokens: 0,
             uName: _name
         });
-        emit NewUser(UserAccounts[msg.sender].uAddress, _role, _name);
+        emit NewUser(_role, _name);
     }
     //relacionar el video y el rol de los autores
 
