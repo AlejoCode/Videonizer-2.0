@@ -4,8 +4,13 @@ contract Videonizer {
 
     address owner;
     uint constant platformPercentage = 20;
-
-    constructor() public {
+    uint expertPercentage = 0;
+    uint userPercentage = 0;
+    uint ownerPercentage = 0;
+    uint expertProfit = 0;
+    uint userProfit = 0;
+    
+    constructor() payable public {
         owner = msg.sender;
     }
 
@@ -139,16 +144,16 @@ contract Videonizer {
         );
     }
 
-    function setDeal(bytes32 _aHash, address _expertAddress, address _userAddress, uint _expertPercentage, uint _userPercentage, uint _dPrice) public {        
+    function setDeal(bytes32 _aHash, uint _dPrice, address _expertAddress, uint _expertPercentage, address _userAddress, uint _userPercentage) public {        
         Deals[_aHash] = Deal ({
             aHash: _aHash,
+            dPrice: _dPrice,
             expertAddress: _expertAddress,
-            userAddress: _userAddress,
             expertPercentage: _expertPercentage,
-            userPercentage: _userPercentage,
-            dPrice: _dPrice
+            userAddress: _userAddress,
+            userPercentage: _userPercentage
         });        
-        emit NewDeal(_aHash, _expertAddress, _userAddress ,_expertPercentage, _userPercentage, _dPrice);                
+        emit NewDeal(_aHash, _dPrice, _expertAddress, _expertPercentage, _userAddress, _userPercentage);                
     }
 
     function watchDeal(bytes32 _aHash) view public returns (bytes32, uint, address, uint, address, uint) {
@@ -161,16 +166,16 @@ contract Videonizer {
         );
     }
     
-    function setSale(bytes32 _aHash) payable public haveMoney(_aHash){
+    function setSale(bytes32 _aHash) payable public{
         Sales[_aHash] = Sale ({
             aHash: _aHash,
             uAddress: msg.sender
         });
-        uint expertPercentage = ((msg.value * 80) / 100);
-        uint userPercentage = ((msg.value * 80) / 100);
-        uint ownerPercentage = ((msg.value * platformPercentage) / 100);
-        uint expertProfit = ((expertPercentage * Deals[_aHash].expertPercentage) / 100);
-        uint userProfit = ((userPercentage * Deals[_aHash].userPercentage) / 100);
+        expertPercentage = ((msg.value * 80) / 100);
+        userPercentage = ((msg.value * 80) / 100);
+        ownerPercentage = ((msg.value * platformPercentage) / 100);
+        expertProfit = ((expertPercentage * Deals[_aHash].expertPercentage) / 100);
+        userProfit = ((userPercentage * Deals[_aHash].userPercentage) / 100);
         (Deals[_aHash].expertAddress).transfer(expertProfit);
         (Deals[_aHash].userAddress).transfer(userProfit);
         owner.transfer(ownerPercentage);
