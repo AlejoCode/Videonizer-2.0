@@ -58,11 +58,11 @@ contract Videonizer {
 
     struct Deal {
         bytes32 aHash;
-        address expertAddress;
-        address userAddress;
-        uint expertPercentage;
-        uint userPercentage;
         uint dPrice;
+        address expertAddress;
+        uint expertPercentage;
+        address userAddress;
+        uint userPercentage;
     }
 
     struct Sale {
@@ -84,11 +84,11 @@ contract Videonizer {
 
     event NewDeal (
         bytes32 aHash,
+        uint dPrice,
         address expertAddress,
-        address userAddress,
         uint expertPercentage,
-        uint userPercentage,
-        uint dPrice
+        address userAddress,
+        uint userPercentage
     );
 
     event NewSale (
