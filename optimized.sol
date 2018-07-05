@@ -53,11 +53,11 @@ contract Videonizer {
 
     struct Deal {
         bytes32 aHash;
-        uint dPrice;
         address expertAddress;
-        uint expertPercentage;
         address userAddress;
+        uint expertPercentage;
         uint userPercentage;
+        uint dPrice;
     }
 
     struct Sale {
@@ -79,11 +79,11 @@ contract Videonizer {
 
     event NewDeal (
         bytes32 aHash,
-        uint dPrice,
         address expertAddress,
-        uint expertPercentage,
         address userAddress,
-        uint userPercentage
+        uint expertPercentage,
+        uint userPercentage,
+        uint dPrice
     );
 
     event NewSale (
@@ -139,16 +139,16 @@ contract Videonizer {
         );
     }
 
-    function setDeal(bytes32 _aHash, uint _dPrice, address _expertAddress, uint _expertPercentage, address _userAddress, uint _userPercentage) public {        
+    function setDeal(bytes32 _aHash, address _expertAddress, address _userAddress, uint _expertPercentage, uint _userPercentage, uint _dPrice) public {        
         Deals[_aHash] = Deal ({
             aHash: _aHash,
-            dPrice: _dPrice,
             expertAddress: _expertAddress,
-            expertPercentage: _expertPercentage,
             userAddress: _userAddress,
-            userPercentage: _userPercentage
+            expertPercentage: _expertPercentage,
+            userPercentage: _userPercentage,
+            dPrice: _dPrice
         });        
-        emit NewDeal(_aHash, _dPrice, _expertAddress, _expertPercentage, _userAddress, _userPercentage);                
+        emit NewDeal(_aHash, _expertAddress, _userAddress ,_expertPercentage, _userPercentage, _dPrice);                
     }
 
     function watchDeal(bytes32 _aHash) view public returns (bytes32, uint, address, uint, address, uint) {
@@ -161,7 +161,7 @@ contract Videonizer {
         );
     }
     
-    function setSale(bytes32 _aHash) payable public haveMoney(_aHash) onlyAssetAndDeal(_aHash){
+    function setSale(bytes32 _aHash) payable public haveMoney(_aHash){
         Sales[_aHash] = Sale ({
             aHash: _aHash,
             uAddress: msg.sender
